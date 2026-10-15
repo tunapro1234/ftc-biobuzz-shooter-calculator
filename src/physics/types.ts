@@ -10,6 +10,8 @@ export interface WheelConfig {
 }
 /** Local 2D geometry of a hood roller. The ball travels in +X and its nominal path is Y=0. */
 export interface HoodRollerConfig extends WheelConfig {
+  /** Angular placement around the curved hood (informational). The axle is
+   * parallel to the main wheel; placement along the path is `center`. */
   angle: number;
   radius: number;
   center: [number, number];

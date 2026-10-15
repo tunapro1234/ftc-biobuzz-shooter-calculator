@@ -69,7 +69,8 @@ test("pose controls, units, solved hit and shot restore", async ({ page }) => {
   await page
     .getByRole("spinbutton", { name: "Main wheel RPM", exact: true })
     .fill("1650");
-  await expect(page.locator(".headline-metrics")).toContainText("8.01");
+  // 1650 RPM · 48 mm radius = 8.29 m/s surface; near-matched hood → 0.996.
+  await expect(page.locator(".headline-metrics")).toContainText("8.26");
   await page.getByLabel("Units", { exact: true }).selectOption("SI");
   await expect(
     page.getByRole("spinbutton", { name: "Exit height", exact: true }),

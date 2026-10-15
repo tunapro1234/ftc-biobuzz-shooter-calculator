@@ -254,12 +254,11 @@ export function simulateShooter(c: Config): ShooterResult {
         maxNormal = Math.max(maxNormal, localNormal);
         const j = inertias[i];
         const driven = !(passive || j === 0 || j === null);
-        // The roller mount angle projects its rim velocity and contact torque
-        // onto the local +X projectile path.
-        const contactRadius =
-          i === 0
-            ? radii[i]
-            : radii[i] * Math.cos((ws[i] as HoodRollerConfig).angle);
+        // The hood path is unrolled along local +X and roller placement is
+        // encoded by its center. Roller axles are parallel to the main wheel,
+        // so the rim velocity at contact is tangent to the path: the mount
+        // angle (angular placement around the hood) does not project it.
+        const contactRadius = radii[i];
         const invJ = coupled
           ? equivalentInertia && !passive
             ? ratios[i] ** 2 / equivalentInertia

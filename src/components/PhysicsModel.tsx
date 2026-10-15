@@ -39,8 +39,8 @@ export function PhysicsModel() {
         droop, stored energy or recovery is reported in that case. Normal force
         uses series spring stiffness, or your measured compression-force curve.
         Contact length is hood radius times arc. Each hood roller has its own
-        center, radius, mount angle, compression offset and contact interval;
-        only rollers overlapping the ball apply an impulse.
+        center, radius, mount angle (placement only), compression offset and
+        contact interval; only rollers overlapping the ball apply an impulse.
       </p>
       <h3>ReCalc calibration</h3>
       <p>
