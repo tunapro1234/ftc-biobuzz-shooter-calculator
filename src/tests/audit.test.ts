@@ -2,6 +2,7 @@ import { it, expect } from "vitest";
 import { current } from "../presets";
 import { ballInertia, simulateShooter, wheelSpeeds } from "../physics/shooter";
 import { parseConfig } from "../utils/config";
+import { aerodynamicForces, liftCoefficient } from "../physics/aerodynamics";
 import { toRPM } from "../utils/units";
 import { fieldConfig } from "../field/fieldConfig";
 import { hiveCells } from "../field/hiveGeometry";
@@ -75,4 +76,22 @@ it("POLLEN defaults to thin-shell inertia; measured inertia overrides", () => {
   const parsed = parseConfig(legacy);
   expect(parsed.projectile.shell).toBe(false);
   expect(ballInertia(parsed)).toBeCloseTo(0.4 * c.projectile.mass * r * r, 15);
+});
+
+it("default lift follows the Sawicki piecewise Cl(S), capped by liftMax", () => {
+  const c = structuredClone(current);
+  expect(c.aero.liftModel).toBe("sawicki");
+  expect(liftCoefficient(0.05, c)).toBeCloseTo(0.075, 12);
+  expect(liftCoefficient(0.1, c)).toBeCloseTo(0.15, 12);
+  expect(liftCoefficient(0.3, c)).toBeCloseTo(0.27, 12);
+  // Capped at liftMax (0.35) for S = 1 backspin.
+  const v: [number, number, number] = [7, 0, 0];
+  const r = c.projectile.diameter / 2;
+  expect(aerodynamicForces(v, [0, -7 / r, 0], c).cl).toBeCloseTo(0.35, 12);
+  // Older profiles keep the linear model.
+  const legacy = JSON.parse(JSON.stringify(current));
+  delete legacy.aero.liftModel;
+  const parsed = parseConfig(legacy);
+  expect(parsed.aero.liftModel).toBe("linear");
+  expect(liftCoefficient(0.05, parsed)).toBeCloseTo(0.03, 12);
 });

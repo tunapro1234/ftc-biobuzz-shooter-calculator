@@ -56,8 +56,9 @@ export function PhysicsModel() {
         m dv/dt = mg + F_drag + F_Magnus
         <br />u = v − wind; A = πr²
         <br />
-        F_drag = −½ρ Cd A |u| u<br />S = |ω|r / |u|; Cl = min(Cl_max, liftSlope
-        · S)
+        F_drag = −½ρ Cd A |u| u<br />S = |ω|r / |u|; Cl = min(Cl_max, Cl(S));
+        Sawicki: Cl = 1.5 S (S &lt; 0.1), 0.09 + liftSlope · S above; linear:
+        liftSlope · S
         <br />
         F_Magnus = ½ρ Cl A |u|² · unit(ω × u)
         <br />

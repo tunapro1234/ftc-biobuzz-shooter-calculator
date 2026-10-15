@@ -124,8 +124,12 @@ export const current: Config = {
   },
   aero: {
     cd: 0.47,
+    // Sawicki, Hubbard & Stronge (arXiv:0712.0380) baseball fit: Cl = 1.5 S
+    // for S < 0.1, else 0.09 + 0.6 S. The 0.35 cap is an uncalibrated
+    // estimate for a light, seamed POLLEN shell; fit it from flight data.
     liftSlope: 0.6,
-    liftMax: 0.5,
+    liftMax: 0.35,
+    liftModel: "sawicki",
     spinDecay: 0.1,
     magnus: true,
   },

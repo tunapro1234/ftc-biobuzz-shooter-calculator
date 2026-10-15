@@ -669,6 +669,14 @@ export function PhysicsControls() {
           checked={c.aero.magnus}
           onChange={(v) => s.edit("aero.magnus", v)}
         />
+        <Select
+          label="Lift model"
+          path="aero.liftModel"
+          options={[
+            ["sawicki", "Sawicki piecewise Cl(S)"],
+            ["linear", "Linear Cl = slope · S"],
+          ]}
+        />
         <N label="Lift slope Cl / S" path="aero.liftSlope" max={3} />
         <N label="Maximum Cl" path="aero.liftMax" max={2} />
         <N label="Spin decay" path="aero.spinDecay" max={5} unit="s⁻¹" />

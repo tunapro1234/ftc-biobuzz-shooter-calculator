@@ -81,6 +81,9 @@ export interface AerodynamicsConfig {
   cd: number;
   liftSlope: number;
   liftMax: number;
+  /** "linear": Cl = liftSlope·S. "sawicki": Cl = 1.5·S at low spin, then
+   * 0.09 + liftSlope·S (Sawicki, Hubbard & Stronge, arXiv:0712.0380). */
+  liftModel: "linear" | "sawicki";
   spinDecay: number;
   magnus: boolean;
 }

@@ -32,14 +32,17 @@ u = v - wind
 A = pi*r²
 F_drag = -0.5*rho*Cd*A*|u|*u
 S = |omega|*r/|u|
-Cl = min(liftMax, liftSlope*S)
+Cl = min(liftMax, Cl(S))
+Cl(S) = 1.5*S                (S < S*)     sawicki (default)
+      = 0.09 + liftSlope*S   (S >= S*),   S* = 0.09/(1.5 - liftSlope) = 0.1 at 0.6
+Cl(S) = liftSlope*S                       linear (profiles saved before this option)
 F_lift = 0.5*rho*Cl*A*|u|²*unit(omega cross u)
 dv/dt = (F_drag+F_lift)/m + [0,0,-g]
 dp/dt = v
 domega/dt = -spinDecay*omega
 ```
 
-Zero/near-zero direction vectors normalize to zero; this also prevents floating-point underflow at near-perfect spin cancellation. Lift is zero for zero spin or parallel airflow/spin. Roughness is an empirical drag multiplier in calibrated POLLEN mode. The Cl curve is an estimate requiring experiments, not a universal law for POLLEN.
+Zero/near-zero direction vectors normalize to zero; this also prevents floating-point underflow at near-perfect spin cancellation. Lift is zero for zero spin or parallel airflow/spin. Roughness is an empirical drag multiplier in calibrated POLLEN mode. The default piecewise Cl(S) is the Sawicki, Hubbard & Stronge baseball fit ([arXiv:0712.0380](https://arxiv.org/pdf/0712.0380)); the 0.35 cap for POLLEN is an uncalibrated estimate. Neither is a measured law for POLLEN; fit `liftSlope`/`liftMax` from flight positions.
 
 ## Numerical method and collision
 
