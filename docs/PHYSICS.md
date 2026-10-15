@@ -61,3 +61,13 @@ Contact excludes new motor electrical energy. Initial wheel kinetic energy is no
 Solver samples 25 hood angles (9 for coverage), bisects command speed against collision-free target-plane range, then validates configured collisions and constraints. It returns multiple candidates. This finite search is not proof of global infeasibility and centered range targeting does not exhaust off-center aiming opportunities. Robustness objective is an explicitly labeled proxy; Monte Carlo supplies actual sampled entry probability under the selected uncertainties.
 
 Calibration uses bounded coordinate search with Huber loss. Residual normalization is 0.1 m/s, 50 RPM and 0.01 m. Only training measurements affect fitting. Validation metrics are evaluated after fitting. Parameters may be unidentifiable without varied launch/flight data; friction and stiffness are particularly coupled. Monte Carlo uses independent seeded Gaussian draws; nonphysical parameters are clamped. Its ellipses describe successful-entry samples only and assume approximately Gaussian scatter.
+
+## Validation
+
+Independent checks run during the physics audit (October 2026); they are not a substitute for measured launches.
+
+- Flight integrator, 7 m/s at 55° from 0.347 m, 0.5 s: vacuum position matches the analytic parabola to 2e-15 m. With drag, and with drag plus linear-model Magnus, it matches SciPy `solve_ivp` DOP853 (rtol 1e-13) to 8e-14 m in position and 1e-13 m/s in velocity; floor-impact time differs by under 5e-12 s.
+- Contact kinematic limits (default POLLEN geometry, 1450 RPM main wheel): a passive hood gives exit speed 0.500 of main-wheel surface speed with rolling spin ω·r/v = 1.000; hood surfaces matched to the main-wheel surface speed give 1.000 and zero spin. Both are the rigid rolling limits.
+- Contact results do not change with `contactStep` between 1e-5 and 1e-3 m (7.260 m/s at the default).
+
+References: Sawicki, Hubbard & Stronge lift fit ([arXiv:0712.0380](https://arxiv.org/pdf/0712.0380)); Nathan, baseball lift and drag ([arXiv:physics/0605041](https://arxiv.org/abs/physics/0605041)); ReCalc flywheel calculator ([reca.lc/flywheel](https://www.reca.lc/flywheel)); Chief Delphi shooter wheel paper ([chiefdelphi.com/media/papers/2725](https://www.chiefdelphi.com/media/papers/2725)).
