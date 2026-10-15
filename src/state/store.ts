@@ -111,10 +111,21 @@ try {
 } catch {
   /* Invalid/stale saved state cannot crash startup. */
 }
+/** Initial theme follows the OS (prefers-color-scheme); the header toggle
+ * overrides it for the session. */
+function systemTheme(): State["theme"] {
+  try {
+    return matchMedia("(prefers-color-scheme: light)").matches
+      ? "light"
+      : "dark";
+  } catch {
+    return "dark";
+  }
+}
 export const useStore = create<State>((set, get) => ({
   config: initial,
   units: "FTC",
-  theme: "dark",
+  theme: systemTheme(),
   view: "Orbit",
   cameraReset: 0,
   dragging: false,
