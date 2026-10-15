@@ -43,11 +43,13 @@ export function wheelSpeeds(c: Config): number[] {
     p.omega,
     secondary,
     ...s.rollers.map((w) =>
-      s.link === "surface"
-        ? ((p.omega * p.diameter) / w.diameter) * s.surfaceRatio
-        : s.link === "gear"
-          ? p.omega * (s.topology === "powered" ? s.secondary.ratio : w.ratio)
-          : w.omega,
+      s.topology === "passive"
+        ? 0
+        : s.link === "surface"
+          ? ((p.omega * p.diameter) / w.diameter) * s.surfaceRatio
+          : s.link === "gear"
+            ? p.omega * (s.topology === "powered" ? s.secondary.ratio : w.ratio)
+            : w.omega,
     ),
   ];
 }
@@ -136,7 +138,7 @@ export function simulateShooter(c: Config): ShooterResult {
   const ratios = ws.map((w, i) =>
     i === 0
       ? 1
-      : i === 1 && s.topology === "passive"
+      : i >= 1 && s.topology === "passive"
         ? 0
         : s.link === "gear" && s.topology === "powered"
           ? s.secondary.ratio
@@ -155,7 +157,7 @@ export function simulateShooter(c: Config): ShooterResult {
     : inertias.some(
         (v, i) =>
           (v === null || (s.mode === "physical" && v === 0)) &&
-          !(i === 1 && s.topology === "passive"),
+          !(i >= 1 && s.topology === "passive"),
       ) || flyI === null;
   const recoveryInertia = unknown
     ? null
@@ -234,7 +236,9 @@ export function simulateShooter(c: Config): ShooterResult {
       }[] = [];
       for (let i = 0; i < ws.length; i++) {
         const sign = i === 0 ? 1 : -1;
-        const passive = i === 1 && s.topology === "passive";
+        // A passive hood makes every hood contact (secondary and rollers) a
+        // fixed surface with zero rim speed.
+        const passive = i >= 1 && s.topology === "passive";
         const penetration =
           i === 0
             ? s.compression
