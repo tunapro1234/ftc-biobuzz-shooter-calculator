@@ -111,8 +111,13 @@ export const current: Config = {
     name: "BIOBUZZ POLLEN - Current Robot",
     model: "sphere",
     diameter: 2.8 * inch,
+    // Mass is unverified (manual gives none); weigh real balls. Scaling a 5 in
+    // ResisDent (~71 g) by surface area suggests ~22 g.
     mass: 0.025,
     inertia: null,
+    // Gopher ResisDent balls are hollow molded polyethylene shells (§9.8);
+    // a thin shell is the closer default until inertia is measured.
+    shell: true,
     initialVelocity: 0.5,
     spin: 0,
     roughness: 1,
@@ -171,6 +176,7 @@ recalc.projectile = {
   diameter: 3.5 * inch,
   mass: 0.042,
   inertia: 0.1 * inertiaImperial,
+  shell: false,
   initialVelocity: 0.5,
   spin: 0,
   roughness: 1,
@@ -251,6 +257,8 @@ zaganos2025.name = "Zağanos 2025-26 (DECODE, passive hood)";
     // (archive/ftc/de-cock/ball-auto-istic/configs/new_shooter.yaml, no source).
     mass: 0.2 * 0.45359237,
     inertia: null,
+    // Construction (hollow or not) not verified for the DECODE ARTIFACT.
+    shell: false,
     initialVelocity: current.projectile.initialVelocity,
     spin: 0,
     roughness: 1,

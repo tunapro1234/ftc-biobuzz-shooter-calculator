@@ -70,6 +70,9 @@ export interface ProjectileConfig {
   diameter: number;
   mass: number;
   inertia: number | null;
+  /** Default inertia when none is measured: thin hollow shell (2/3·m·r²)
+   * instead of a solid sphere (0.4·m·r²). */
+  shell: boolean;
   initialVelocity: number;
   spin: number;
   roughness: number;

@@ -4,7 +4,7 @@ import { NumberInput as N, Select, Section, Toggle } from "./Inputs";
 import { aim } from "../physics/flight";
 import type { Shot, WheelConfig } from "../physics/types";
 import { toDeg, toRPM } from "../utils/units";
-import { wheelInertia } from "../physics/shooter";
+import { ballInertia, wheelInertia } from "../physics/shooter";
 import { getPath, parseConfig } from "../utils/config";
 export function RobotControls() {
   const s = useStore();
@@ -632,15 +632,15 @@ export function PhysicsControls() {
           max={500}
         />
         <Toggle
+          label="Hollow shell default inertia (⅔ m r²)"
+          checked={c.projectile.shell}
+          onChange={(v) => s.edit("projectile.shell", v)}
+        />
+        <Toggle
           label="Use custom ball inertia"
           checked={c.projectile.inertia !== null}
           onChange={(v) =>
-            s.edit(
-              "projectile.inertia",
-              v
-                ? 0.4 * c.projectile.mass * (c.projectile.diameter / 2) ** 2
-                : null,
-            )
+            s.edit("projectile.inertia", v ? ballInertia(c) : null)
           }
         />
         {c.projectile.inertia !== null && (

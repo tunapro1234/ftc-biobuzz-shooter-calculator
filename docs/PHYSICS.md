@@ -19,7 +19,7 @@ The Coulomb cap supports sliding and the effective-mass clamp supports sticking.
 
 The effective linear stiffness is `1/(1/k_ball + 1/k_wheel)` and normal force is stiffness times compression, reduced by the empirical hysteresis fraction. Alternatively, interpolate the measured compression/normal-force table. This is a lumped compliance model. Slip work is computed from impulse work minus resolved kinetic-energy gain. Elastic and hysteresis energy are estimates, not an integrated deformable-body energy balance.
 
-`I_ball = 0.4*m*r²` only when the user selects the simple solid-sphere default; measured MOI overrides it. Wheel disk MOI similarly requires measured mass and an explicit disk choice.
+Without a measured MOI, `I_ball = (2/3)*m*r²` for a thin hollow shell (POLLEN presets: Gopher ResisDent balls are hollow molded polyethylene, manual §9.8) or `0.4*m*r²` for a solid sphere; measured MOI overrides both. Profiles saved before this option load as solid spheres. The 25 g POLLEN mass is unverified (the manual gives no mass; scaling a ~71 g 5 in ResisDent by surface area suggests ~22 g), so weigh real balls. Wheel disk MOI similarly requires measured mass and an explicit disk choice.
 
 ## ReCalc reference
 

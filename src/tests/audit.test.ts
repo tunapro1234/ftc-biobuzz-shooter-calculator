@@ -1,6 +1,7 @@
 import { it, expect } from "vitest";
 import { current } from "../presets";
-import { simulateShooter, wheelSpeeds } from "../physics/shooter";
+import { ballInertia, simulateShooter, wheelSpeeds } from "../physics/shooter";
+import { parseConfig } from "../utils/config";
 import { toRPM } from "../utils/units";
 import { fieldConfig } from "../field/fieldConfig";
 import { hiveCells } from "../field/hiveGeometry";
@@ -59,4 +60,19 @@ it("CELL opening center follows the 30° arm geometry of manual Fig. 9-9/9-10", 
   const lowest = lower.center[2] - half;
   expect(lowest).toBeGreaterThan(f.hive.bottomHeight);
   expect(lowest - f.hive.bottomHeight).toBeLessThan(2 * inch);
+});
+
+it("POLLEN defaults to thin-shell inertia; measured inertia overrides", () => {
+  const c = structuredClone(current);
+  const r = c.projectile.diameter / 2;
+  expect(c.projectile.shell).toBe(true);
+  expect(ballInertia(c)).toBeCloseTo((2 / 3) * c.projectile.mass * r * r, 15);
+  c.projectile.inertia = 1e-5;
+  expect(ballInertia(c)).toBe(1e-5);
+  // Older profiles without the field load as solid spheres.
+  const legacy = JSON.parse(JSON.stringify(current));
+  delete legacy.projectile.shell;
+  const parsed = parseConfig(legacy);
+  expect(parsed.projectile.shell).toBe(false);
+  expect(ballInertia(parsed)).toBeCloseTo(0.4 * c.projectile.mass * r * r, 15);
 });

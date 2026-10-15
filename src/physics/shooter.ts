@@ -15,10 +15,14 @@ export function wheelInertia(w: WheelConfig) {
       ? w.inertia
       : null;
 }
+/** Measured inertia overrides; otherwise a thin hollow shell (2/3 m r²) or a
+ * solid sphere (2/5 m r²). */
 export function ballInertia(c: Config) {
   return (
     c.projectile.inertia ??
-    0.4 * c.projectile.mass * (c.projectile.diameter / 2) ** 2
+    (c.projectile.shell ? 2 / 3 : 0.4) *
+      c.projectile.mass *
+      (c.projectile.diameter / 2) ** 2
   );
 }
 export function wheelRadius(w: WheelConfig): number {

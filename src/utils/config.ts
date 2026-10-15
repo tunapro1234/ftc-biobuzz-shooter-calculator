@@ -43,6 +43,14 @@ export function parseConfig(value: unknown): Config {
     )
       throw new Error(`${path}: invalid value`);
   }
+  // Profiles saved before the hollow-shell option keep a solid-sphere default.
+  const projectile = (value as { projectile?: Record<string, unknown> })
+    ?.projectile;
+  if (projectile && typeof projectile === "object" && !("shell" in projectile))
+    value = {
+      ...(value as object),
+      projectile: { ...projectile, shell: false },
+    };
   check(value, current, "profile");
   const c = value as Config;
   if (c.version !== 1) throw new Error("Unsupported profile version");
