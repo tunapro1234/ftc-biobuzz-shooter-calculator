@@ -13,6 +13,7 @@ import {
 } from "../physics/analysis";
 import { downloadJSON } from "../utils/config";
 import { LegacyData } from "./LegacyData";
+import { ClearancePanel } from "./ClearancePanel";
 const sigmaLabels: Record<keyof Uncertainty, [string, Unit, string?]> = {
   rpm: ["Wheel speed σ", "none", "RPM"],
   angle: ["Hood angle σ", "angle"],
@@ -492,6 +493,7 @@ export function AnalysisPanel({ a }: { a: AnalysisState }) {
           </>
         )}
       </Section>
+      <ClearancePanel />
       <LegacyData />
     </>
   );

@@ -226,3 +226,26 @@ test("last-season DECODE preset and reference data render", async ({
   await expect(chart.locator("circle")).toHaveCount(49);
   await expect(page.getByText("Not BIOBUZZ")).toBeVisible();
 });
+test("clearance envelope panel draws and reacts to geometry", async ({
+  page,
+}) => {
+  await page
+    .locator(".tabs")
+    .getByRole("button", { name: "Analysis", exact: true })
+    .click();
+  await page
+    .locator("summary")
+    .filter({ hasText: "Clearance envelope" })
+    .click();
+  const chart = page.getByLabel("Clearance envelope side view");
+  await expect(chart.locator("polyline").first()).toBeVisible();
+  const summary = page.getByLabel("Clearance summary");
+  await expect(summary).toContainText("Wheel-axis vertical line");
+  await expect(summary).not.toContainText("NaN");
+  const before = await summary.textContent();
+  await page
+    .getByRole("spinbutton", { name: "Max elevation", exact: true })
+    .fill("60");
+  await expect(summary).not.toHaveText(before ?? "");
+  await expect(summary).not.toContainText("NaN");
+});
