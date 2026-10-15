@@ -26,7 +26,7 @@ const sushiWheel = (
   contactStart: number,
   contactEnd: number,
 ): HoodRollerConfig => ({
-  ...wheel(inch, rpm(1450 * 3.75)),
+  ...wheel(inch, rpm(1130 * 3.75)),
   ratio: 3.75,
   angle,
   radius: inch / 2,
@@ -56,7 +56,8 @@ export const current: Config = {
   shooter: {
     mode: "physical",
     topology: "powered",
-    primary: wheel(0.096, rpm(1450)),
+    // 1130 RPM scores from the default pose against the manual-derived CELL (hits 1080–1180 RPM).
+    primary: wheel(0.096, rpm(1130)),
     secondary: sushiWheel((-20 * Math.PI) / 180, 0.025, 0, 0.06),
     rollers: [
       sushiWheel(0, 0.07, 0.025, 0.105),

@@ -3,7 +3,7 @@ import { current } from "../presets";
 import { ballInertia, simulateShooter, wheelSpeeds } from "../physics/shooter";
 import { parseConfig } from "../utils/config";
 import { aerodynamicForces, liftCoefficient } from "../physics/aerodynamics";
-import { toRPM } from "../utils/units";
+import { rpm, toRPM } from "../utils/units";
 import { fieldConfig } from "../field/fieldConfig";
 import { hiveCells } from "../field/hiveGeometry";
 
@@ -12,6 +12,7 @@ const surface = (c: typeof current) =>
 
 it("passive topology makes every hood roller passive", () => {
   const c = structuredClone(current);
+  c.shooter.primary.omega = rpm(1450); // audit reference speed
   c.shooter.topology = "passive";
   expect(wheelSpeeds(c).slice(1)).toEqual([0, 0, 0]);
   const s = simulateShooter(c);
