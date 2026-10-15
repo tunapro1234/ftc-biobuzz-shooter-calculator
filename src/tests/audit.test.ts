@@ -2,6 +2,8 @@ import { it, expect } from "vitest";
 import { current } from "../presets";
 import { simulateShooter, wheelSpeeds } from "../physics/shooter";
 import { toRPM } from "../utils/units";
+import { fieldConfig } from "../field/fieldConfig";
+import { hiveCells } from "../field/hiveGeometry";
 
 const surface = (c: typeof current) =>
   (c.shooter.primary.omega * c.shooter.primary.diameter) / 2;
@@ -34,4 +36,27 @@ it("powered hood rim speed is tangent to the path (mount angle is placement)", (
   const f = simulateShooter(flat);
   expect(f.speed).toBeCloseTo(s.speed, 12);
   expect(f.spin).toBeCloseTo(s.spin, 12);
+});
+
+it("CELL opening center follows the 30° arm geometry of manual Fig. 9-9/9-10", () => {
+  const f = fieldConfig;
+  const inch = 0.0254;
+  const [x, y, z] = f.target.center;
+  expect(x / inch).toBeCloseTo(12.75, 6);
+  expect(y / inch).toBeCloseTo(-15.77, 2);
+  expect(z / inch).toBeCloseTo(59.55, 6);
+  // Opening face lies 21.455 in (half the 42.91 in assembly) from the pivot
+  // along the 30° arm.
+  const along = -y * Math.cos(Math.PI / 6) + (z - f.hive.pivotHeight) * 0.5;
+  expect(along / inch).toBeCloseTo(42.91 / 2, 6);
+  // Opening corners reproduce the published 53.5 / 65.6 in heights.
+  const half = (f.target.height / 2) * Math.sin(Math.PI / 3);
+  expect((z - half) / inch).toBeCloseTo(53.5, 1);
+  expect((z + half) / inch).toBeCloseTo(65.6, 1);
+  // The downward CELL opening stays just above the 30.6 in HIVE bottom.
+  expect(f.hive.bottomHeight / inch).toBeCloseTo(30.6, 6);
+  const lower = hiveCells(f).find((c) => c.id === "blue-lower-cell")!;
+  const lowest = lower.center[2] - half;
+  expect(lowest).toBeGreaterThan(f.hive.bottomHeight);
+  expect(lowest - f.hive.bottomHeight).toBeLessThan(2 * inch);
 });
