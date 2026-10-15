@@ -67,7 +67,7 @@ test("pose controls, units, solved hit and shot restore", async ({ page }) => {
   await px.fill("-1.1");
   await expect(px).toHaveValue("-1.1");
   await page
-    .getByRole("spinbutton", { name: "96 mm goBILDA Rhino RPM", exact: true })
+    .getByRole("spinbutton", { name: "Main wheel RPM", exact: true })
     .fill("1650");
   await expect(page.locator(".headline-metrics")).toContainText("8.01");
   await page.getByLabel("Units", { exact: true }).selectOption("SI");
@@ -169,7 +169,9 @@ test("measured-data UI fits synthetic reference without claiming real measuremen
   await page
     .getByRole("button", { name: "Fit training measurements", exact: true })
     .click();
-  await expect(page.locator("tbody")).toContainText("0.850");
+  await expect(
+    page.locator("tbody").filter({ hasText: "transfer" }),
+  ).toContainText("0.850");
   await expect(page.getByText(/Training RMSE:/)).toContainText(
     "Validation: 0.00",
   );
@@ -198,4 +200,25 @@ test("profile export and reimport preserve independently edited SI configuration
   await expect(
     page.getByRole("spinbutton", { name: "Exit height", exact: true }),
   ).toHaveValue("347");
+});
+test("last-season DECODE preset and reference data render", async ({
+  page,
+}) => {
+  await page
+    .getByLabel("Robot preset", { exact: true })
+    .selectOption({ label: "Zağanos 2025-26 (DECODE, passive hood)" });
+  await page.getByRole("button", { name: "Shot metrics", exact: true }).click();
+  await expect(page.locator(".metric-table")).not.toContainText("NaN");
+  await expect(page.locator(".headline-metrics")).not.toContainText("NaN");
+  await page
+    .locator(".tabs")
+    .getByRole("button", { name: "Analysis", exact: true })
+    .click();
+  await page
+    .locator("summary")
+    .filter({ hasText: "Last-season reference data" })
+    .click();
+  const chart = page.getByLabel("Legacy RPM versus distance");
+  await expect(chart.locator("circle")).toHaveCount(49);
+  await expect(page.getByText("Not BIOBUZZ")).toBeVisible();
 });

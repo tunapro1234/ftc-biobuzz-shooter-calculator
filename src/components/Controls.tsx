@@ -221,7 +221,7 @@ export function ShooterControls({ shot }: { shot: Shot }) {
         ]}
       />
       <N
-        label="96 mm goBILDA Rhino RPM"
+        label="Main wheel RPM"
         path="shooter.primary.omega"
         kind="rpm"
         max={c.simulation.maxOmega}
@@ -374,8 +374,9 @@ export function ShooterControls({ shot }: { shot: Shot }) {
       </Section>
       <Section title="Compression & contact">
         <p className="muted">
-          Powered hood: 3 × AndyMark 1 in Sushi wheels. All are mechanically
-          linked to the main wheel at the editable hood/main RPM ratio.
+          {c.shooter.topology === "passive"
+            ? "Passive hood: the hood contact has zero surface speed."
+            : "Powered hood: 3 × AndyMark 1 in Sushi wheels. All are mechanically linked to the main wheel at the editable hood/main RPM ratio."}
         </p>
         <Select
           label="Mechanism"
@@ -477,7 +478,7 @@ export function ShooterControls({ shot }: { shot: Shot }) {
           </div>
         ))}
       </Section>
-      <Wheel path="shooter.primary" title="96 mm goBILDA Rhino" />
+      <Wheel path="shooter.primary" title="Main wheel" />
       <Wheel path="shooter.secondary" title="Sushi hood wheel 1" />
       <Section title="Motor & flywheel">
         <p className="muted">

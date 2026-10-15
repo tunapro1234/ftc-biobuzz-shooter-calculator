@@ -57,6 +57,7 @@ A HIT records inward entry of the entire ball through the active pentagonal blue
 - `src/physics`: pure SI contact, flight, aerodynamics, integration, target collision, solver, calibration and Monte Carlo functions; independent of React and Three.js.
 - `src/field/fieldConfig.ts`: official V1 field geometry with provenance, including the centered deployed HIVE fixture.
 - `src/presets`: current robot/projectile and exact ReCalc input values.
+- `src/data/legacy2025.ts`: FTC #25577's 2025-26 (DECODE) measured hits, lookup table and fitted formulas with provenance. Shown under **Analysis → Last-season reference data**; the matching **Zağanos 2025-26 (DECODE, passive hood)** preset uses last season's 5 in ARTIFACT and is not a BIOBUZZ configuration.
 - `src/workers`: heavy analysis; cancellation terminates worker immediately.
 - `src/state`: serializable design configuration and UI state.
 - `src/scene`: Z-up visualization, robot dragging, camera and shot playback.

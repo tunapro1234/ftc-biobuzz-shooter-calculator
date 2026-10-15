@@ -882,7 +882,8 @@ footer button {
   font-size: 11px;
   margin-left: 8px;
 }
-.scatter {
+.scatter,
+.legacy-chart {
   width: 100%;
   background: #142027;
   border-radius: 5px;

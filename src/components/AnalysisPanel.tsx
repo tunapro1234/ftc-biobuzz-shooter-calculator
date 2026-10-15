@@ -11,6 +11,7 @@ import {
   type Uncertainty,
 } from "../physics/analysis";
 import { downloadJSON } from "../utils/config";
+import { LegacyData } from "./LegacyData";
 export function AnalysisPanel({ a }: { a: AnalysisState }) {
   const s = useStore(),
     c = s.config;
@@ -460,6 +461,7 @@ export function AnalysisPanel({ a }: { a: AnalysisState }) {
           </>
         )}
       </Section>
+      <LegacyData />
     </>
   );
 }
