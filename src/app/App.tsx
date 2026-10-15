@@ -17,7 +17,7 @@ import {
   Moon,
 } from "lucide-react";
 import { FieldScene } from "../scene/FieldScene";
-import { useStore, type CameraView } from "../state/store";
+import { useStore, loadProfiles, type CameraView } from "../state/store";
 import { simulate } from "../physics/flight";
 import { toDeg } from "../utils/units";
 import { presets } from "../presets";
@@ -64,11 +64,7 @@ export default function App() {
     [notification, setNotification] = useState(""),
     [profiles, setProfiles] = useState<Config[]>(() => {
       try {
-        return (
-          JSON.parse(
-            localStorage.getItem("pollen-profiles") ?? "[]",
-          ) as unknown[]
-        ).map(parseConfig);
+        return loadProfiles(localStorage.getItem("pollen-profiles"));
       } catch {
         return [];
       }

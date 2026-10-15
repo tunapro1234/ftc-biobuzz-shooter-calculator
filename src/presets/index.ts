@@ -57,7 +57,9 @@ export const current: Config = {
       sushiWheel((20 * Math.PI) / 180, 0.115, 0.07, 0.15),
     ],
     link: "gear",
-    surfaceRatio: 3.75,
+    // Hood/main surface-speed ratio, used only by the "surface" lock. The 3.75
+    // RPM ratio above already gives ~equal surface speeds, so the lock is 1:1.
+    surfaceRatio: 1,
     hoodAngle: deg(65),
     hoodMin: deg(35),
     hoodMax: deg(85),
