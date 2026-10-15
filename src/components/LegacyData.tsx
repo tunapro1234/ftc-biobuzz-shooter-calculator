@@ -21,8 +21,8 @@ export function LegacyData() {
     xMax = 160,
     yMin = 3500,
     yMax = 6000;
-  const x = (d: number) => 40 + (210 * (d - xMin)) / (xMax - xMin);
-  const y = (r: number) => 160 - (145 * (r - yMin)) / (yMax - yMin);
+  const x = (d: number) => 48 + (200 * (d - xMin)) / (xMax - xMin);
+  const y = (r: number) => 148 - (135 * (r - yMin)) / (yMax - yMin);
   const line = (band: LegacyBand) =>
     `${x(d0)},${y(legacyRPM(d0, band))} ${x(d1)},${y(legacyRPM(d1, band))}`;
   return (
@@ -38,36 +38,39 @@ export function LegacyData() {
       >
         {[3500, 4000, 4500, 5000, 5500, 6000].map((r) => (
           <g key={r}>
-            <line x1="40" x2="250" y1={y(r)} y2={y(r)} stroke="#344047" />
-            <text x="2" y={y(r) + 3} fontSize="9" fill="#73867c">
+            <line className="chart-grid" x1="48" x2="248" y1={y(r)} y2={y(r)} />
+            <text className="tick" x="44" y={y(r) + 3} textAnchor="end">
               {r}
             </text>
           </g>
         ))}
         {[40, 80, 120, 160].map((d) => (
-          <text key={d} x={x(d) - 6} y="175" fontSize="9" fill="#73867c">
+          <text key={d} className="tick" x={x(d)} y="161" textAnchor="middle">
             {d}
           </text>
         ))}
+        <text className="axis-title" x="148" y="176" textAnchor="middle">
+          Robot distance to goal (in)
+        </text>
+        <text
+          className="axis-title"
+          transform="translate(10 80) rotate(-90)"
+          textAnchor="middle"
+        >
+          Wheel RPM
+        </text>
         {(["min", "max"] as const).map((band) => (
-          <polyline
-            key={band}
-            points={line(band)}
-            stroke="#73867c"
-            strokeDasharray="3 3"
-            fill="none"
-          />
+          <polyline key={band} className="chart-dashed" points={line(band)} />
         ))}
-        <polyline points={line("mean")} stroke="#afd4be" fill="none" />
+        <polyline className="chart-line alt" points={line("mean")} />
         {shots.map((s) => (
           <circle
             key={s.odsRow}
+            className={`chart-dot ${s.excluded ? "hollow" : ""}`}
             cx={x(s.distance)}
             cy={y(s.actualRPM)}
-            r={2}
-            fill={s.excluded ? "none" : "#e7bc77"}
-            stroke="#e7bc77"
-            opacity={0.8}
+            r={2.2}
+            opacity={0.85}
           />
         ))}
       </svg>

@@ -76,7 +76,7 @@ test("pose controls, units, solved hit and shot restore", async ({ page }) => {
     page.getByRole("spinbutton", { name: "Exit height", exact: true }),
   ).toHaveValue("0.347");
   await page.getByLabel("Units", { exact: true }).selectOption("FTC");
-  await page.getByRole("button", { name: "Auto solve ↗", exact: true }).click();
+  await page.getByRole("button", { name: "Auto solve", exact: true }).click();
   await expect(page.locator(".candidate").first()).toBeVisible();
   await page.locator(".candidate").first().click();
   await expect(page.locator(".field-status")).toContainText("HIT");
@@ -107,7 +107,7 @@ test("ReCalc reference metrics are visible and exact", async ({ page }) => {
 test("worker Monte Carlo and field coverage finish and render", async ({
   page,
 }) => {
-  await page.getByRole("button", { name: "Auto solve ↗", exact: true }).click();
+  await page.getByRole("button", { name: "Auto solve", exact: true }).click();
   await expect(page.locator(".candidate").first()).toBeVisible();
   await page.locator(".candidate").first().click();
   await page
@@ -128,7 +128,7 @@ test("worker Monte Carlo and field coverage finish and render", async ({
     .getByRole("spinbutton", { name: "Field grid spacing", exact: true })
     .fill("500");
   await page
-    .getByRole("button", { name: "Evaluate Hood Range", exact: true })
+    .getByRole("button", { name: "Run field coverage", exact: true })
     .click();
   await expect(page.locator(".success")).toContainText("sampled poses", {
     timeout: 60000,
@@ -165,7 +165,10 @@ test("measured-data UI fits synthetic reference without claiming real measuremen
     .getByRole("button", { name: "Validate measurements", exact: true })
     .click();
   await page
-    .getByRole("checkbox", { name: "transfer [0.1, 2]", exact: true })
+    .getByRole("checkbox", {
+      name: "Transfer calibration · transfer [0.1, 2]",
+      exact: true,
+    })
     .check();
   await page
     .getByRole("button", { name: "Fit training measurements", exact: true })
