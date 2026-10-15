@@ -12,6 +12,7 @@ import {
 } from "../physics/analysis";
 import { downloadJSON } from "../utils/config";
 import { LegacyData } from "./LegacyData";
+import { ClearancePanel } from "./ClearancePanel";
 export function AnalysisPanel({ a }: { a: AnalysisState }) {
   const s = useStore(),
     c = s.config;
@@ -461,6 +462,7 @@ export function AnalysisPanel({ a }: { a: AnalysisState }) {
           </>
         )}
       </Section>
+      <ClearancePanel />
       <LegacyData />
     </>
   );
