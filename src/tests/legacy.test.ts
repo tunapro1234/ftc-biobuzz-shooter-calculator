@@ -11,7 +11,7 @@ import {
 import { current, zaganos2025 } from "../presets";
 import { simulateShooter } from "../physics/shooter";
 import { parseConfig } from "../utils/config";
-import { toRPM } from "../utils/units";
+import { rpm, toRPM } from "../utils/units";
 
 it("keeps every row of the measurement sheet", () => {
   // ÖLÇÜMLER SAHA FTC.ods Sheet1: rows 2-50; the analysis drops position 2,2.
@@ -88,4 +88,15 @@ it("powered BIOBUZZ hood at near-matched surface speed has little spin", () => {
   expect(Math.abs(powered)).toBeLessThan(
     0.1 * toRPM(simulateShooter(passive).spin),
   );
+});
+
+it("Zağanos exit speed rises with wheel RPM near the passive rolling limit", () => {
+  const out = [3700, 4700, 5800].map((value) => {
+    const c = structuredClone(zaganos2025);
+    c.shooter.primary.omega = rpm(value);
+    const s = simulateShooter(c);
+    const surface = (c.shooter.primary.omega * c.shooter.primary.diameter) / 2;
+    return s.speed / surface;
+  });
+  for (const ratio of out) expect(ratio).toBeGreaterThan(0.48);
 });

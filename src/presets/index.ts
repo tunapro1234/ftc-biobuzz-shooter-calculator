@@ -226,8 +226,15 @@ zaganos2025.name = "Zağanos 2025-26 (DECODE, passive hood)";
   // modeling choice that keeps penetration ≈ compression along the contact
   // arc (a nearly flat local hood), not a measurement.
   const flatHoodRadius = 1;
+  // ASSUMPTION, not measured: 1 in compression (4 in wheel-to-hood gap for the
+  // 5 in ball). With the default 8 mm the 21 N normal force caps wheel
+  // friction, the ball slides the whole arc and exits at a constant 9.41 m/s
+  // for any RPM. At 1 in (67 N) the contact reaches the rolling limit
+  // (≈ ½ surface speed) across the measured 3700–5800 RPM. The ball and wheel
+  // stiffness are also unmeasured; refit compression/friction from data.
+  s.compression = 0.0254;
   // Hood radius about the wheel axis follows from wheel + ball radii minus the
-  // (default, uncalibrated) compression.
+  // compression.
   s.hoodRadius = s.primary.diameter / 2 + ballRadius - s.compression;
   const arc = Math.abs(s.hoodEnd - s.hoodStart) * s.hoodRadius;
   s.secondary = {
